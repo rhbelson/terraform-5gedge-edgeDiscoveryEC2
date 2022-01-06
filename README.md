@@ -15,8 +15,10 @@ terraform apply -auto-approve
 ## Launching Infrastructure
 For any EC2 instances launched thereafter, be sure to use the following Tag for each resource:
 
-Key: `eds-ec2-plugin-app-name`
-Value: `<applicationName>` #The value you set to the applicationName variable in `terraform.tfvars`  
+```
+Key: eds-ec2-plugin-app-name
+Value: <applicationName> #The value you set to the applicationName variable in terraform.tfvars  
+```
 
 Note that, by default, this tag value is set to `wavelength-app`.
 
