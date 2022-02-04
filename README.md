@@ -1,5 +1,5 @@
 # EDS Data Plane Module for EC2
-This module enables automatic registration of your Amazon EC2-based  service endpoints to Verizon's edge discovery service using AWS tags.
+This module enables automatic registration of your Amazon EC2-based service endpoints to Verizon's edge discovery service using AWS tags.
 
 ## Getting Started
 To launch this module, clone the repo and initialize the Terraform module.
