@@ -27,14 +27,14 @@ variable "edsSecretKey" {
 }
 
 variable "edsServiceProfileId" {
+  default     = ""
   type        = string
-  sensitive   = true
   description = "The serviceProfileId maintained by the Verizon Edge Discovery Service"
 }
 
 variable "edsServiceEndpointsId" {
+  default     = ""
   type        = string
-  sensitive   = true
   description = "The serviceEndpointsId maintained by the Verizon Edge Discovery Service"
 }
 
@@ -47,6 +47,6 @@ variable "portNumber" {
 variable "applicationName" {
   type        = string
   default     = "wavelength-app"
-  description = "Tag value that AWS API will search for to populate your Edge Discovery Service endpoints (the tag key must read 'eds-ec2-plugin-app-name')." 
+  description = "Tag value that AWS API will search for to populate your Edge Discovery Service endpoints (the tag key must read 'eds-ec2-plugin-app-name')."
 }
 

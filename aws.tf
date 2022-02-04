@@ -90,8 +90,8 @@ resource "aws_lambda_function" "edsDataPlaneLambda" {
 #######################################################################################
 #EventBridge Assets
 resource "aws_cloudwatch_event_rule" "ec2_event_rule" {
-  name          = "carrier_ip_creation_or_ec2_creation"
-  description   = "Event for EDS Data Plane API"
+  name        = "carrier_ip_creation_or_ec2_creation"
+  description = "Event for EDS Data Plane API"
   # role_arn      = aws_iam_role.iam_for_lambda.arn
   event_pattern = <<EOF
     {
