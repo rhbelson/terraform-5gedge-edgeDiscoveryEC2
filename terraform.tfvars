@@ -4,5 +4,3 @@ edsServiceProfileId = ""
 edsServiceEndpointsId = ""
 portNumber = "80"
 applicationName = "wavelength-app"
-
-
