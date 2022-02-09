@@ -27,13 +27,13 @@ variable "edsSecretKey" {
 }
 
 variable "edsServiceProfileId" {
-  default     = ""
+  default     = " "
   type        = string
   description = "The serviceProfileId maintained by the Verizon Edge Discovery Service"
 }
 
 variable "edsServiceEndpointsId" {
-  default     = ""
+  default     = " "
   type        = string
   description = "The serviceEndpointsId maintained by the Verizon Edge Discovery Service"
 }

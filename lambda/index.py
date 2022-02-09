@@ -70,7 +70,7 @@ def lambda_handler(event, context):
     """
     Step 2: Generate Service Profile (if one does not exists)
     """
-    if edsServiceProfileId=="":
+    if edsServiceProfileId==" ":
         edsServiceProfileId=vzEdgeDiscovery.createServiceProfile(
             accessToken=access_token,
             maxLatency=40)
@@ -79,7 +79,7 @@ def lambda_handler(event, context):
     Step 3: Create Service Registry (of one does not exist)
     """
     myApplicationId="Verizon_5G_Edge_Application"
-    if edsServiceEndpointsId=="":
+    if edsServiceEndpointsId==" ":
         edsServiceEndpointsId=vzEdgeDiscovery.createServiceRegistry(
             accessToken=access_token,
             serviceProfileId=edsServiceProfileId,
