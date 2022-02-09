@@ -89,7 +89,7 @@ def lambda_handler(event, context):
     if edsServiceEndpointsId==" " and carrierIPFound==True:
         endpointsResponse=vzEdgeDiscovery.createServiceRegistry(
             accessToken=access_token,
-            serviceProfileId=edsServiceProfileId,
+            serviceProfileId=profileResponse,
             carrierIps=carrierIps,
             availabilityZones=subnets,
             fqdns=fqdns,
