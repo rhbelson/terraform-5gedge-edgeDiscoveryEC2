@@ -73,12 +73,12 @@ def lambda_handler(event, context):
     Step 2: Generate Service Profile (if one does not exists)
     """
     if edsServiceProfileId==" ":
-        response=vzEdgeDiscovery.createServiceProfile(
+        profileResponse=vzEdgeDiscovery.createServiceProfile(
             accessToken=access_token,
             maxLatency=40)
-        print(response)
+        print(profileResponse)
         client = boto3.client('ssm',region_name=os.environ['AWS_REGION'])
-        new_string_parameter = client.put_parameter(Name='eds-data-plane-api-edsServiceProfileId', Value=str(response), Type='String', Overwrite=True)
+        new_string_parameter = client.put_parameter(Name='eds-data-plane-api-edsServiceProfileId', Value=str(profileResponse), Type='String', Overwrite=True)
 
 
 
@@ -87,7 +87,7 @@ def lambda_handler(event, context):
     """
     myApplicationId="Verizon_5G_Edge_Application"
     if edsServiceEndpointsId==" " and carrierIPFound==True:
-        response=vzEdgeDiscovery.createServiceRegistry(
+        endpointsResponse=vzEdgeDiscovery.createServiceRegistry(
             accessToken=access_token,
             serviceProfileId=edsServiceProfileId,
             carrierIps=carrierIps,
@@ -95,8 +95,8 @@ def lambda_handler(event, context):
             fqdns=fqdns,
             applicationId=myApplicationId)
         client = boto3.client('ssm',region_name=os.environ['AWS_REGION'])
-        print(response)
-        new_string_parameter = client.put_parameter(Name='eds-data-plane-api-edsServiceEndpointsId', Value=str(response), Type='String', Overwrite=True)
+        print(endpointsResponse)
+        new_string_parameter = client.put_parameter(Name='eds-data-plane-api-edsServiceEndpointsId', Value=str(endpointsResponse), Type='String', Overwrite=True)
     else:
         edsServiceEndpointsId=vzEdgeDiscovery.updateServiceRegistry(
             accessToken=access_token,
