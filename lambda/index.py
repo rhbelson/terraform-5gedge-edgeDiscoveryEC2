@@ -42,11 +42,13 @@ def lambda_handler(event, context):
     
     carrierIps=[]
     subnets=[]
+    carrierIPFound=False 
     # Ensure that all instances across all reservations are accounted 
     for reservation in reservations["Reservations"]:
         for nodeGroups in reservation["Instances"]:
             for instances in nodeGroups["NetworkInterfaces"]:
                 try: 
+                    carrierIPFound=True
                     print("Carrier IP Found: "+str(instances["Association"]["CarrierIp"]))
                     carrierIps.append(instances["Association"]["CarrierIp"])
                     subnetInfo=client.describe_subnets(SubnetIds=[instances["SubnetId"]])
@@ -74,12 +76,15 @@ def lambda_handler(event, context):
         edsServiceProfileId=vzEdgeDiscovery.createServiceProfile(
             accessToken=access_token,
             maxLatency=40)
-    
+        new_string_parameter = client.put_parameter(Name='eds-data-plane-api-edsServiceProfileId', Value=edsServiceProfileId["serviceProfileId"], Type='String', Overwrite=True)
+
+
+
     """
     Step 3: Create Service Registry (of one does not exist)
     """
     myApplicationId="Verizon_5G_Edge_Application"
-    if edsServiceEndpointsId==" ":
+    if edsServiceEndpointsId==" " and carrierIPFound==True:
         edsServiceEndpointsId=vzEdgeDiscovery.createServiceRegistry(
             accessToken=access_token,
             serviceProfileId=edsServiceProfileId,
@@ -87,6 +92,7 @@ def lambda_handler(event, context):
             availabilityZones=subnets,
             fqdns=fqdns,
             applicationId=myApplicationId)
+        new_string_parameter = client.put_parameter(Name='eds-data-plane-api-edsServiceEndpointsId', Value=edsServiceEndpointsId["serviceEndpointsId"], Type='String', Overwrite=True)
     else:
         edsServiceEndpointsId=vzEdgeDiscovery.updateServiceRegistry(
             accessToken=access_token,
