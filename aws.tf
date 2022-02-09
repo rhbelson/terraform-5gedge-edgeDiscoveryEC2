@@ -74,13 +74,10 @@ resource "aws_iam_role_policy_attachment" "iam_for_lambda_ssmAccess" {
 }
 
 resource "aws_lambda_function" "edsDataPlaneLambda" {
-  filename         = "edsDataPlaneLambda.zip"
   function_name    = "edsDataPlaneLambda"
   role             = aws_iam_role.iam_for_lambda.arn
   handler          = "index.lambda_handler"
-  # source_code_hash = filebase64sha256("edsDataPlaneLambda.zip")
-  source_path      = "${path.module}/edsDataPlaneLambda.zip"
-  # source_code_hash = filebase64sha256("${path.module}/edsDataPlaneLambda.zip")
+  source_code_hash = filebase64sha256("${path.module}/edsDataPlaneLambda.zip")
   runtime          = "python3.8"
   timeout          = 10
   environment {
