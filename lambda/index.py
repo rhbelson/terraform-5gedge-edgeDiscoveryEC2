@@ -88,8 +88,8 @@ def lambda_handler(event, context):
     """
 
    # Note, if serviceProfile already exists, use it from SSM
-   if profileResponse=="":
-       profileResponse=edsServiceProfileId
+    if profileResponse=="":
+        profileResponse=edsServiceProfileId
 
     myApplicationId="Verizon_5G_Edge_Application"
     if edsServiceEndpointsId==" " and carrierIPFound==True:
