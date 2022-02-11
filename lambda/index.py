@@ -72,6 +72,7 @@ def lambda_handler(event, context):
     """
     Step 2: Generate Service Profile (if one does not exists)
     """
+    profileResponse=""
     if edsServiceProfileId==" ":
         profileResponse=vzEdgeDiscovery.createServiceProfile(
             accessToken=access_token,
@@ -85,6 +86,11 @@ def lambda_handler(event, context):
     """
     Step 3: Create Service Registry (of one does not exist)
     """
+
+   # Note, if serviceProfile already exists, use it from SSM
+   if profileResponse=="":
+       profileResponse=edsServiceProfileId
+
     myApplicationId="Verizon_5G_Edge_Application"
     if edsServiceEndpointsId==" " and carrierIPFound==True:
         endpointsResponse=vzEdgeDiscovery.createServiceRegistry(
