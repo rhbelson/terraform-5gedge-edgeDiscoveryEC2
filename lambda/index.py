@@ -79,19 +79,15 @@ def lambda_handler(event, context):
         client = boto3.client('ssm',region_name=os.environ['AWS_REGION'])
         new_string_parameter = client.put_parameter(Name='eds-data-plane-api-edsServiceProfileId', Value=str(profileResponse), Type='String', Overwrite=True)
 
-
-
     """
     Step 3: Create Service Registry (of one does not exist)
     """
-
    # Note, if serviceProfile already exists, use it from SSM
     if profileResponse=="":
         profileResponse=edsServiceProfileId
 
     myApplicationId="Verizon_5G_Edge_Application"
     if edsServiceEndpointsId==" " and carrierIPFound==True:
-        
         # Populate array of endpoint IDs based on available subnets
         myApplicationIds=[]
         fqdns=[]
@@ -111,8 +107,8 @@ def lambda_handler(event, context):
         client = boto3.client('ssm',region_name=os.environ['AWS_REGION'])
         print(endpointsResponse)
         new_string_parameter = client.put_parameter(Name='eds-data-plane-api-edsServiceEndpointsId', Value=str(endpointsResponse), Type='String', Overwrite=True)
+    
     else: #If EDS service registry needs to be updated, create net-new service registry
-
         # Populate array of endpoint IDs based on available subnets
         myApplicationIds=[]
         fqdns=[]
@@ -131,7 +127,6 @@ def lambda_handler(event, context):
         # Update SSM parameter for sevice registry ID
         print(endpointsResponse)
         new_string_parameter = client.put_parameter(Name='eds-data-plane-api-edsServiceEndpointsId', Value=str(endpointsResponse), Type='String', Overwrite=True)
-   
     
     return {
         'statusCode': 200,
