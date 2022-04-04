@@ -126,6 +126,7 @@ def lambda_handler(event, context):
         
         # Update SSM parameter for sevice registry ID
         print(endpointsResponse)
+        client = boto3.client('ssm',region_name=os.environ['AWS_REGION'])
         new_string_parameter = client.put_parameter(Name='eds-data-plane-api-edsServiceEndpointsId', Value=str(endpointsResponse), Type='String', Overwrite=True)
     
     return {
