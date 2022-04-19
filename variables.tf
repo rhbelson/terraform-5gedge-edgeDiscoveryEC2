@@ -16,13 +16,13 @@ variable "region" {
 
 variable "edsAccessKey" {
   type        = string
-  sensitive   = true
+  # sensitive   = true
   description = "The access key for the Verizon Edge Discovery Service"
 }
 
 variable "edsSecretKey" {
   type        = string
-  sensitive   = true
+  # sensitive   = true
   description = "The access key for the Verizon Edge Discovery Service"
 }
 
