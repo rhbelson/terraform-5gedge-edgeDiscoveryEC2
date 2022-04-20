@@ -14,33 +14,32 @@ def lambda_handler(event, context):
     applicationName = client.get_parameter(
         Name='eds-data-plane-api-applicationName'
     )["Parameter"]["Value"]
-    print(applicationName)
+    print("Application name", applicationName)
     edsAccessKey = client.get_parameter(
         Name='eds-data-plane-api-edsAccessKey'
     )["Parameter"]["Value"]
-    print(edsAccessKey)
+    print("Access key", edsAccessKey)
     edsSecretKey = client.get_parameter(
         Name='eds-data-plane-api-edsSecretKey'
     )["Parameter"]["Value"]
-    print(edsSecretKey)
+    print("Secret key", edsSecretKey)
     portNumber = client.get_parameter(
         Name='eds-data-plane-api-portNumber'
     )["Parameter"]["Value"]
-    print(portNumber)
+    print("Port",portNumber)
     edsServiceProfileId = client.get_parameter(
         Name='eds-data-plane-api-edsServiceProfileId'
     )["Parameter"]["Value"]
-    print(edsServiceProfileId)
+    print("Service profile",edsServiceProfileId)
     edsServiceEndpointsId = client.get_parameter(
         Name='eds-data-plane-api-edsServiceEndpointsId'
     )["Parameter"]["Value"]
-    print(edsServiceEndpointsId)
+    print("Service registry",edsServiceEndpointsId)
     
     
     # Collect Input from SSM including tag value for tagName "eds-ec2-plugin-app-name" (required tag value for relevant instances)
     client = boto3.client('ec2',region_name=os.environ['AWS_REGION'])
     reservations = client.describe_instances(Filters=[{'Name': 'tag:eds-ec2-plugin-app-name', 'Values': [applicationName]}])
-    
     carrierIps=[]
     subnets=[]
     carrierIPFound=False 
@@ -49,12 +48,12 @@ def lambda_handler(event, context):
         for nodeGroups in reservation["Instances"]:
             for instances in nodeGroups["NetworkInterfaces"]:
                 try: 
-                    carrierIPFound=True
                     print("Carrier IP Found: "+str(instances["Association"]["CarrierIp"]))
                     carrierIps.append(instances["Association"]["CarrierIp"])
                     subnetInfo=client.describe_subnets(SubnetIds=[instances["SubnetId"]])
                     print("Corresponding Subnet Info: "+str(subnetInfo["Subnets"][0]["AvailabilityZone"]))
                     subnets.append(subnetInfo["Subnets"][0]["AvailabilityZone"])
+                    carrierIPFound=True
                 except:
                     print("No Carrier IP found.")
     
@@ -72,13 +71,16 @@ def lambda_handler(event, context):
     """
     Step 2: Generate Service Profile (if one does not exists)
     """
+    print("Creating service profile...")
     profileResponse=""
     if edsServiceProfileId==" ":
         profileResponse=my_obj.create_service_profile(access_token=access_token,max_latency=40)
         print(profileResponse)
         client = boto3.client('ssm',region_name=os.environ['AWS_REGION'])
         new_string_parameter = client.put_parameter(Name='eds-data-plane-api-edsServiceProfileId', Value=str(profileResponse), Type='String', Overwrite=True)
-
+    else:
+        print("Service profile created... Proceeding with service registry creation.")
+   
     """
     Step 3: Create Service Registry (of one does not exist)
     """
@@ -88,6 +90,7 @@ def lambda_handler(event, context):
 
     myApplicationId="Verizon_5G_Edge_Application"
     if edsServiceEndpointsId==" " and carrierIPFound==True:
+        print("No existing service registry. Creating serviceEndpoints object...")
         # Populate array of endpoint IDs based on available subnets
         myApplicationIds=[]
         fqdns=[]
@@ -110,6 +113,7 @@ def lambda_handler(event, context):
     
     else: #If EDS service registry needs to be updated, create net-new service registry
         # Populate array of endpoint IDs based on available subnets
+        print("Service registry already exists...")
         myApplicationIds=[]
         fqdns=[]
         for subnet in subnets:
